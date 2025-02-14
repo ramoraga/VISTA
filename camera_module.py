@@ -28,14 +28,10 @@ class Robot_Cam:
         self.cal_points = []
         self.task_list = []
 
-        
-
         self.out1 = cv2.VideoWriter('boundary-calibration.mp4', cv2.VideoWriter_fourcc(*'mp4v'), 10, (640, 480))
         self.out2 = cv2.VideoWriter('instance-segmentation.mp4', cv2.VideoWriter_fourcc(*'mp4v'), 10, (640, 480))
 
         
-
-
     # This function resets camera hardware
 
     def resetHardware(self):
@@ -587,19 +583,6 @@ def apply_colorMask(hsv, zoomed_frame):
     return final_image
 
 def find_rotationAngle(source_points, target_points):
-    """
-    Detects the orientation of an object using PyCPD.
-
-    Parameters:
-    - source_points: A (N x 3) numpy array of points from the detected object (e.g., center + corners)
-    - target_points: A (N x 3) numpy array of reference points with known orientation (e.g., a standard shape)
-
-    Returns:
-    - rotation_matrix: A 3x3 numpy array representing the rotation matrix.
-    - euler_angles: A numpy array of Euler angles (in degrees) representing the rotation in 'xyz' axes.
-    - rotation_angle: The angle of rotation in degrees.
-    """
-    
     # Step 1: Set up the registration (source = detected object, target = reference object)
     reg = RigidRegistration(X=target_points, Y=source_points)
     
