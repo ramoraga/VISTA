@@ -228,14 +228,9 @@ while(my_tasks):
                     _, converted, _ = convertPoints(obj_x, obj_y, i, fetched_matrix)
                     r_corners.append(converted)
 
-                
                 for i in r_corners:
                     print(i)
-
-
-
-
-
+                    
                 error_list = []
                 match_list = []
                 for i in range(len(r_corners)):
@@ -279,7 +274,6 @@ while(my_tasks):
                         if center[point] == obj_center or (x_diff < 30 and y_diff < 30):
                     # Update current task with new values
                     #***************do if for the TasksList table************************************
-
                             R_obj_center, R_obj_corners, source_points = convertPoints(obj_x, obj_y, corners[point], fetched_matrix)
                             rotation_matrix, euler_angles, rotation_angle = find_rotationAngle(source_points, target_points)
 
@@ -322,103 +316,3 @@ while(my_tasks):
 # Once all tasks are complete
 print("***All Tasks Complete!***")
 time.sleep(2)
-
-#'''
-
-
-'''while True:
-    Cam1.detect_ObjectCamCoords()
-    CP = Cam1.get_ObjectCamCoords()
-    # populate parts list and task list
-
-    #execute robot operation
-    angle = math.atan(R[0,1]/R[0,0])*(180/math.pi)
-    robot1.pickNorient_arm(cent_C[0],cent_C[1],52,0,0,0,Tr[0],Tr[1],56,0,0,angle) ##for old block z is 52,  for new z is 64
-    robot1.move_aside()
-
-    #plot graph   
-    #plot_3d(C, D, B_transformed)
-
-
-
-    for i in CP:
-        db.insert_parts_list(i)
- 
-    CPSrc = []
-    CPTgt = []
- 
-    fetched_CP = db.get_parts_list_all()
-    for i in fetched_CP:
-        if i['color'] == 'gray':
-            CPTgt.append(i)
-        else:
-            CPSrc.append(i)
-
-    #future code for multiple shapes
-
-    TShape = []
-    RShape = []
-    TShapeT = []
-    RShapeT = []
- 
-    for i in CPSrc:
-        if len(i['corners']) > 5:
-            a = db.extract_CP(i)
-            TShape.append(a)
-        else:
-            b = db.extract_CP(i)
-            RShape.append(b)
- 
-    for i in CPTgt:
-        if len(i['corners']) > 5:
-            c = db.extract_CP(i)
-            TShapeT.append(c)
-        else:
-            d = db.extract_CP(i)
-            RShapeT.append(d)
-
-    #defining the points A and B for registration
-    Aa = RShape
-    Bb = RShapeT
-
-    A = Aa[0]
-    B = Bb[0]
-
-    # A = np.array(A)
-    # B = np.array(B)
-
-    # A_3d = np.hstack((A, np.zeros((A.shape[0], 1), dtype=np.float32)))
-    # B_3d = np.hstack((B, np.zeros((B.shape[0], 1), dtype=np.float32)))
-
-    #converting camera coordinates to robot coordinates
-    C = []
-    D = []
-
-
-    for i in A:
-        transformed_point = transform_point(fetched_matrix, i)
-        C.append((int(round(transformed_point[0])), int(round(transformed_point[1])), 0))
-    for i in B:
-        transformed_point = transform_point(fetched_matrix, i)
-        D.append((int(round(transformed_point[0])), int(round(transformed_point[1])), 0))
- 
-    C = np.array(C)
-    cent_C = find_centroid(C)
-    D = np.array(D)
- 
-    #Apply rigid registration to align A to B
-    registration = RigidRegistration(X=D, Y=C)
-    transform_output = registration.register()
-    s,R,t = registration.get_registration_parameters()
-    R = registration.R
-    t = registration.t
-    B_transformed = registration.TY
-
-
-
-
- 
-    '''
-
-
-
